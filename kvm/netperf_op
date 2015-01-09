@@ -1,0 +1,16 @@
+MIGRATED UDP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 10.237.23.184 (10.237.23.184) port 0 AF_INET
+Socket  Message  Elapsed      Messages                   CPU      Service
+Size    Size     Time         Okay Errors   Throughput   Util     Demand
+bytes   bytes    secs            #      #   10^6bits/sec % SS     us/KB
+
+212992    1208   2.00       194609      0      940.2     6.16     4.291 
+212992           2.00       194583             940.1     5.18     3.613 
+
+MIGRATED UDP STREAM TEST from 0.0.0.0 (0.0.0.0) port 0 AF_INET to 10.237.23.184 (10.237.23.184) port 0 AF_INET
+Socket  Message  Elapsed      Messages                   CPU      Service
+Size    Size     Time         Okay Errors   Throughput   Util     Demand
+bytes   bytes    secs            #      #   10^6bits/sec % SS     us/KB
+
+212992    1258   2.00       187569      0      943.8     4.16     2.892 
+212992           2.00       187553             943.7     10.16    7.055 
+
