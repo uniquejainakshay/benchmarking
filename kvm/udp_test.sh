@@ -2,15 +2,22 @@
 #
 # 	All sizes are ethernet frame sizes 
 #
-start=1250
-end=1300
-interval=50
+arr[0]=22   #64
+arr[1]=86   #128
+arr[2]=214  #256
+arr[3]=470  #512
+arr[4]=982  #1024
+arr[5]=1458 #1500
+
+start=0
+end=5
+interval=1
 #
 #
 #	the specified size will be ethernet payload. Netperf will add 42 byte headers and the net size will 
 # 	be same as specified 
-start=`expr $start - 42`
-end=`expr $end - 42`
+#start=`expr $start - 42`
+#end=`expr $end - 42`
 #
 #
 #
@@ -20,24 +27,22 @@ netperf_client=/home/compile/Downloads/netperf-2.5.0/src/netperf
 key_file=/home/compile/Desktop/benchmarking/kvm/key
 #
 #
-netperf_test_length=2
+netperf_test_length=10
 username=shashank
 #
-vm_ip_address=10.237.23.184
-host_ip_address=10.237.23.184
+vm_ip_address=10.237.23.21
+host_ip_address=10.237.23.21
 #
 netperf_output_file=netperf_op
 mpstat_output_file=mpstat_op
 #######################################################################################
-
-
-################  	pre executiono checks  
+#  	pre executiono checks  
 
 
 #	check if the hostip is same as vm ip
 if [ $vm_ip_address ==  $host_ip_address ]
 then 
-	echo -e "\tWarning : Host IP address and VM ip addresses are same "
+	echo -e "\tWarning : Host IP address and VM ip addresses are same. This is useful only in baremetal tests"
 fi
 
 #  	check for file, give error if not found
@@ -78,11 +83,11 @@ echo -e "\n#########		Running netperf UDP_STREAM test on remote server $vm_ip_ad
 
 for((i=$start;i<=$end;i=i+ $interval))
 do
-	echo "Test iteration running with ethernet frame size `expr $i + 42 `"
-	echo -e "\tNETPERF COMMAND : $netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m $i >> $netperf_output_file & "
+	echo "Test iteration running with ethernet frame size `expr ${arr[$i]} + 42 `"
+	echo -e "\tNETPERF COMMAND : $netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m ${arr[$i]} >> $netperf_output_file & "
 	echo -e "\tCPU UTILIZATION COMMAND :  ssh -i $key_file $username@$host_ip_address \"mpstat -P ALL $netperf_test_length 1 \" >> $mpstat_output_file"
 
-	$netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m $i >> $netperf_output_file & 
+	$netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m ${arr[$i]} >> $netperf_output_file & 
 	ssh -i $key_file $username@$host_ip_address "mpstat -P ALL  $netperf_test_length 1 " >> $mpstat_output_file
 	
 #	wait for the netperf to exit before we start the next iteration 
