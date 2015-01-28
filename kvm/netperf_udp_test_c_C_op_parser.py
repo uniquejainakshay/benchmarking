@@ -95,7 +95,7 @@ while i < len(b):
 	#print b[i+1]
         pkt_size = int(b[i][1]) + 42
 	#ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 1000.0*(pkt_size-8)/(pkt_size+62.0), 1000000.0/((float(b[i][5])+66.0)*8), 1000000.0/((float(b[i+1][3])+66.0)*8 ) ])
-	ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 1000.0*(pkt_size-42)/(pkt_size+20.0), 1000000.0/((float(b[i][5])+66.0)*8), 1000000.0/((float(b[i+1][3])+66.0)*8 ) ])
+	ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 1000.0*(pkt_size-42)/(pkt_size-42+66), 1000000.0/((float(b[i][5])+66.0)*8), 1000000.0/((float(b[i+1][3])+66.0)*8 ) ])
 	i += 8
 
 
