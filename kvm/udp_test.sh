@@ -99,7 +99,7 @@ echo -e "\nTest completed successfully. Netperf test output written to file : $n
 echo -e "\tCPU utilization output written to file : $mpstat_output_file"
 
 echo "Parsing the output of netperf "
-python netperf_udp_test_c_C_op_parser.py $netperf_output_file > $netperf_output_file"_graph_input"
+python netperf_udp_test_c_C_op_parser.py $netperf_output_file $mpstat_output_file > $netperf_output_file"_graph_input"
 if [ $? -ne 0 ] ; then echo "Error parsing $netperf_output_file "; echo "Exiting"; exit; fi
 echo "Parsed output of netperf : $netperf_output_file _graph_input"
 
