@@ -12,6 +12,19 @@ arr[5]=1458 #1500
 start=0
 end=5
 interval=1
+
+# no of repetitions per packet 
+iter_per_packet=5
+if [ $# -ne 1 ]
+then
+	echo "Test type argument expected"
+	echo "1 - Baremetal Multicore "
+	echo "2 - Baremetal Single core"
+	echo -e "\nEmulated / paravirt / passthrough  : "
+	echo "3 - Multicore Host"
+	echo "4 - Single core host"
+	exit
+fi
 #
 #
 #	the specified size will be ethernet payload. Netperf will add 42 byte headers and the net size will 
@@ -27,7 +40,7 @@ netperf_client=/home/compile/Downloads/netperf-2.5.0/src/netperf
 key_file=/home/compile/Desktop/benchmarking/kvm/key
 #
 #
-netperf_test_length=10
+netperf_test_length=1
 username=shashank
 #
 vm_ip_address=10.237.23.21
@@ -80,15 +93,21 @@ check_for_previous_output_file $mpstat_output_file
 
 echo -e "\n#########		Running netperf UDP_STREAM test on remote server $vm_ip_address\n\n" 
 
-
+# for each packet size 
 for((i=$start;i<=$end;i=i+ $interval))
 do
 	echo "Test iteration running with ethernet frame size `expr ${arr[$i]} + 42 `"
 	echo -e "\tNETPERF COMMAND : $netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m ${arr[$i]} >> $netperf_output_file & "
 	echo -e "\tCPU UTILIZATION COMMAND :  ssh -i $key_file $username@$host_ip_address \"mpstat -P ALL $netperf_test_length 1 \" >> $mpstat_output_file"
 
-	$netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m ${arr[$i]} >> $netperf_output_file & 
-	ssh -i $key_file $username@$host_ip_address "mpstat -P ALL  $netperf_test_length 1 " >> $mpstat_output_file
+
+	# run each pkt size $iter_per_packet times, and take avg while parsing output 
+	for((j=0;j< $iter_per_packet;j++))
+	do
+		echo -e "\tIteration $j\n"
+		$netperf_client  -H $vm_ip_address -l $netperf_test_length -t UDP_STREAM -c -C  -- -m ${arr[$i]} >> $netperf_output_file & 
+		ssh -i $key_file $username@$host_ip_address "mpstat -P ALL  $netperf_test_length 1 " >> $mpstat_output_file
+	done
 	
 #	wait for the netperf to exit before we start the next iteration 
 	while [ `pidof netperf` ] ; do sleep 0.1; done
@@ -99,9 +118,10 @@ echo -e "\nTest completed successfully. Netperf test output written to file : $n
 echo -e "\tCPU utilization output written to file : $mpstat_output_file"
 
 echo "Parsing the output of netperf "
-python netperf_udp_test_c_C_op_parser.py $netperf_output_file $mpstat_output_file > $netperf_output_file"_graph_input"
+# here the $1 is the test type hint ( baremetal , emulated/ paravirt , passthro ) 
+python netperf_udp_test_c_C_op_parser.py $netperf_output_file $mpstat_output_file $1 $iter_per_packet > $netperf_output_file"_graph_input"
 if [ $? -ne 0 ] ; then echo "Error parsing $netperf_output_file "; echo "Exiting"; exit; fi
-echo "Parsed output of netperf : $netperf_output_file _graph_input"
+echo "Parsed output of netperf : $netperf_output_file""_graph_input"
 
 
 echo "Exiting "
