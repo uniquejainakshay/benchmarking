@@ -36,15 +36,16 @@ fi
 #
 #	configure these variables as required 
 #
-netperf_client=/home/compile/Downloads/netperf-2.5.0/src/netperf
-key_file=/home/compile/Desktop/benchmarking/kvm/key
+netperf_client=netperf
+
+key_file=/home/akshay/benchmarking/kvm/key
 #
 #
-netperf_test_length=1
-username=shashank
+netperf_test_length=10
+username=akshay
 #
-vm_ip_address=10.237.23.21
-host_ip_address=10.237.23.21
+vm_ip_address=192.168.0.10
+host_ip_address=172.16.0.41
 #
 netperf_output_file=netperf_op
 mpstat_output_file=mpstat_op
@@ -84,7 +85,7 @@ function check_for_previous_output_file {
 }
 
 checkfile $key_file
-checkfile $netperf_client
+#checkfile $netperf_client
 
 
 check_for_previous_output_file $netperf_output_file 

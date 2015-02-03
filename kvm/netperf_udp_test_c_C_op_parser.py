@@ -50,10 +50,12 @@ def get_avg_max_list(command):
     
 def mean_list(ll):
     mean = [0.0] * len(ll[0])
+#sum
     for l in ll:
         l = map(float, l)
         for i in range(len(mean)):
             mean[i] += l[i]
+#divide by the count 
     count = len(ll)
     for i in range(len(mean)):
         mean[i] /= count
@@ -94,8 +96,9 @@ while i < len(b):
 	#print b[i]
 	#print b[i+1]
         pkt_size = int(b[i][1]) + 42
-	#ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 1000.0*(pkt_size-8)/(pkt_size+62.0), 1000000.0/((float(b[i][5])+66.0)*8), 1000000.0/((float(b[i+1][3])+66.0)*8 ) ])
-	ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 1000.0*(pkt_size-42)/(pkt_size-42+66), 1000000.0/((float(b[i][5])+66.0)*8), 1000000.0/((float(b[i+1][3])+66.0)*8 ) ])
+#  66 = 8 ( udp header ) + 20 ( ip header ) + (38 l1 and l0 ethernet headers ) 
+	ans.append([pkt_size, b[i][5], b[i][6], b[i+1][3], b[i+1][4], 10000.0*(pkt_size-42)/(pkt_size-42+66), 1000.0 * ( float(b[i][5]) / float(pkt_size)), 1000.0 * (float(b[i+1][3]) / float(pkt_size + 24))])
+    # 24 is the  additional is preamble + interframe gap + checksum
 	i += 8
 
 
@@ -103,17 +106,14 @@ new_ans = []
 ans.sort(key=lambda x : x[0])
 groups = make_groups(ans)
 for group in groups : 
-
-
     new_ans += [mean_list(group)]
-
 
 ans = new_ans
 
 
 
 #extract the max used processor and the average CPU usage from the mpstat file 
-command = "grep -v Linux " + sys.argv[2] + "  | grep -v Average  | grep -v iowait | sed '/^$/d' | awk {'print $3 \" \"$12'}"
+command = "grep -v Linux " + sys.argv[2] + "  | grep -v Average  | grep -v iowait | sed '/^$/d' | awk {'print $3 \" \"$13'}"
 #print command 
 
 avg_max_values = get_avg_max_list(command)
