@@ -1,0 +1,5 @@
+modprobe pci_stub
+echo "14e4 168a" > /sys/bus/pci/drivers/pci-stub/new_id
+echo 0000:01:00.0 > /sys/bus/pci/devices/0000\:01\:00.0/driver/unbind 
+echo 0000:01:00.0 > /sys/bus/pci/drivers/pci-stub/bind
+sudo install_qemu/bin/qemu-system-x86_64 --enable-kvm  -m 4G -m 4G -boot c -net none -hda imgs/ub14_x86_64_qemu_2_2_0 -device pci-assign,host=01:00.0

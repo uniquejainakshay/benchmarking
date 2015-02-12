@@ -1,0 +1,4 @@
+set term png size 2000, 1200
+set output "Varied_bandwidth.png"
+set key outside
+ plot "64" using 4:3 title 'Receiver Throughput "64"B' with linespoints,"128" using 4:3 title 'Receiver Throughput "128"B' with linespoints,"256" using 4:3 title 'Receiver Throughput "256"B' with linespoints,"512" using 4:3 title 'Receiver Throughput "512"B' with linespoints,"1024" using 4:3 title 'Receiver Throughput "1024"B' with linespoints,"1500" using 4:3 title 'Receiver Throughput "1500"B' with linespoints;

@@ -1,0 +1,8 @@
+set term png size 2000, 1200
+set output "Throughput.png"
+set key outside
+plot "graph_input" using 1:7 title 'Theoritical Maximum(Mib/S)' with linespoints, "graph_input" using 1:2 title 'Throughput ' with linespoints; 
+set term png size 2000, 1200
+set output "CPU.png" 
+set key outside 
+plot "graph_input" using 1:4 title 'Guest utilization [netperf]' with linespoints, "graph_input" using 1:5 title 'Avg. Host CPU utilization [mpstat]' with linespoints, "graph_input" using 1:6 title 'Max. Host CPU utilization [mpstat]' with linespoints;

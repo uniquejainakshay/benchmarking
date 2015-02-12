@@ -1,0 +1,21 @@
+1
+#pkt_sz		c_th		c_util		s_th		s_util		max_th		cThKpps		sThKpps		mpAvgCPU	mpMaxCPU
+64.0 		96.4 		4.8 		66.8 		2.0 		250.0 		1505.6 		759.3 		1.4 		61.5
+128.0 		374.5 		4.8 		261.1 		2.0 		565.8 		2926.1 		1717.8 		1.4 		68.5
+256.0 		850.2 		5.2 		638.9 		2.0 		764.3 		3321.2 		2281.6 		1.4 		59.3
+512.0 		2016.3 		4.9 		1406.7 		2.1 		876.9 		3938.0 		2624.4 		1.5 		69.2
+1024.0 		3953.2 		5.6 		2818.8 		2.0 		937.0 		3860.5 		2689.7 		1.5 		68.8
+1500.0 		5895.8 		4.9 		4203.0 		2.0 		956.7 		3930.5 		2757.9 		1.5 		69.4
+
+
+
+#pkt_sz : Ethernet frame size
+#c_th : Client throughput
+#s_th : Server throughput
+#c_util : Client CPU utilization 
+#s_util : Server CPU utilization 
+#max_th : Max theoretical throughput
+#c_th_kpps : Client throughput in kilo packets per second ( needs to be verified )
+#s_th_kpps : Server throughput in kilo packets per second ( needs to be verified )
+#mpAvgCPU  : Average CPU utilization measured by mpstat on the host
+#mpMaxCPU  : The CPU utilization of maximum utilized CPU core 
